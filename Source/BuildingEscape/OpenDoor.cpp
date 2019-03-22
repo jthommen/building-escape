@@ -70,7 +70,9 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// Check if it's time to close the door
-	if (isOpen && GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	if (!PressurePlate->IsOverlappingActor(ActorThatOpens)
+		&& GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay
+		&& isOpen)
 	{
 		CloseDoor();
 	}
