@@ -10,17 +10,19 @@
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UGrabber : public UActorComponent
 {
+
+private:	
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UGrabber();
+	float Reach = 100.f;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	// Sets default values for this component's properties
+	UGrabber();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
