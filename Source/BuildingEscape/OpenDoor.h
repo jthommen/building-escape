@@ -23,10 +23,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 1.f;
 
-	float LastDoorOpenTime;
+	float LastDoorOpenTime = 0.f;
 
 	AActor* ActorThatOpens; // pawn inherits from actor
 	AActor* Owner; // The owning door
+	FRotator OwnerRotation; // Starting rotation of the door
+	bool isOpen = false; // Door State
 
 public:	
 	// Sets default values for this component's properties
@@ -34,6 +36,7 @@ public:
 
 	void OpenDoor();
 	void CloseDoor();
+	void LogRotation();
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

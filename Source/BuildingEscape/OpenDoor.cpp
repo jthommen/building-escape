@@ -21,20 +21,38 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();
+	OwnerRotation = Owner->GetActorRotation();
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-	
+	LogRotation();
+}
+
+void UOpenDoor::LogRotation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s rotation: %s"), *Owner->GetName(), *OwnerRotation.ToString());
 }
 
 void UOpenDoor::OpenDoor()
 {
 	// set door rotation
-	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+	if (isOpen == false)
+	{
+		isOpen = true;
+		OwnerRotation.Yaw += OpenAngle;
+		Owner->SetActorRotation(OwnerRotation);
+		LogRotation();
+	}
 }
 
 void UOpenDoor::CloseDoor()
 {
 	// set door rotation
-	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+	if (isOpen == true)
+	{
+		isOpen = false;
+		OwnerRotation.Yaw += OpenAngle * (-1);
+		Owner->SetActorRotation(OwnerRotation);
+		LogRotation();
+	}
 }
 
 
@@ -52,7 +70,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// Check if it's time to close the door
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+	if (isOpen && GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
 	{
 		CloseDoor();
 	}
